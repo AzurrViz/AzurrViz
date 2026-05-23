@@ -250,6 +250,183 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── GALLERY LIGHTBOX ── */
+  .gallery-overlay {
+    position: fixed; inset: 0;
+    z-index: 2000;
+    background: rgba(4,4,4,0.97);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .gallery-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* header */
+  .gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .gallery-title-group {}
+  .gallery-cat {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--azure);
+    margin-bottom: 6px;
+  }
+  .gallery-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--off-white);
+  }
+  .gallery-close {
+    width: 48px; height: 48px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--off-white);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .gallery-close:hover { border-color: var(--azure); background: var(--azure); color: var(--black); }
+
+  /* main area */
+  .gallery-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* big preview */
+  .gallery-preview {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery-preview-media {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    border: 1px solid var(--border);
+    display: block;
+    transition: opacity 0.25s ease;
+  }
+  .gallery-preview-media.video-embed {
+    width: 100%; aspect-ratio: 16/9;
+    border: none;
+    background: #000;
+  }
+  .gallery-nav-btn {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 52px; height: 52px;
+    border: 1px solid var(--border);
+    background: rgba(8,8,8,0.8);
+    color: var(--off-white);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    z-index: 10;
+  }
+  .gallery-nav-btn:hover { border-color: var(--azure); background: var(--azure); color: var(--black); }
+  .gallery-prev { left: 16px; }
+  .gallery-next { right: 16px; }
+  .gallery-nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+  .gallery-counter {
+    position: absolute;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  /* thumbnail strip */
+  .gallery-strip {
+    width: 200px;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .gallery-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, opacity 0.2s;
+    background: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .gallery-thumb.video-thumb {
+    position: relative;
+  }
+  .gallery-thumb.video-thumb::after {
+    content: '▶';
+    position: absolute;
+    font-size: 20px;
+    color: rgba(255,255,255,0.8);
+  }
+  .gallery-thumb:hover { border-color: rgba(0,180,216,0.4); }
+  .gallery-thumb.active { border-color: var(--azure); }
+  .gallery-thumb-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .gallery-thumb-wrap { display: flex; flex-direction: column; cursor: pointer; }
+
+  /* click hint on portfolio items */
+  .portfolio-overlay-hint {
+    margin-top: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--azure);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .portfolio-overlay-hint::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--azure);
+  }
+
+  @media (max-width: 768px) {
+    .gallery-strip { display: none; }
+    .gallery-header { padding: 20px 24px; }
+    .gallery-preview { padding: 16px; }
+  }
+
   /* MARQUEE */
   .marquee-section {
     border-top: 1px solid var(--border);
@@ -1069,11 +1246,11 @@
       <div class="stat-label">Projekata</div>
     </div>
     <div class="stat">
-      <div class="stat-num">30<span>+</span></div>
+      <div class="stat-num">20<span>+</span></div>
       <div class="stat-label">Zadovoljnih klijenata</div>
     </div>
     <div class="stat">
-      <div class="stat-num">3<span>+</span></div>
+      <div class="stat-num">2<span>+</span></div>
       <div class="stat-label">Godine iskustva</div>
     </div>
   </div>
@@ -1232,7 +1409,7 @@
     </div>
   </div>
   <div class="portfolio-grid">
-    <div class="portfolio-item">
+    <div class="portfolio-item" data-gallery="video-reel">
       <div class="portfolio-thumb">
         <div class="portfolio-thumb-bg p1"></div>
         <div class="portfolio-thumb-inner">
@@ -1244,9 +1421,10 @@
         <div class="portfolio-overlay-cat">Video Editing</div>
         <div class="portfolio-overlay-title">Cinematic Reel 2024</div>
         <div class="portfolio-overlay-desc">Highlight reel sa color gradingom i custom motion graphics-om.</div>
+        <div class="portfolio-overlay-hint">Otvori galeriju</div>
       </div>
     </div>
-    <div class="portfolio-item">
+    <div class="portfolio-item" data-gallery="lensart">
       <div class="portfolio-thumb">
         <img src="LensArt.jpg" class="portfolio-thumb-bg" style="width:100%; height:100%; object-fit:cover;">
         <div class="portfolio-thumb-inner">
@@ -1258,23 +1436,25 @@
         <div class="portfolio-overlay-cat">Logo Design</div>
         <div class="portfolio-overlay-title">Brand Identity — LensArt</div>
         <div class="portfolio-overlay-desc">Minimalistički logo sa kompletnim brand kitom.</div>
+        <div class="portfolio-overlay-hint">Otvori galeriju</div>
       </div>
     </div>
-    <div class="portfolio-item">
+    <div class="portfolio-item" data-gallery="km-web">
       <div class="portfolio-thumb">
-        <img src="image.png" class="portfolio-thumb-bg" style="width:100%; height:100%; object-fit:cover;">
+        <div class="portfolio-thumb-bg p3"></div>
         <div class="portfolio-thumb-inner">
-          <span class="portfolio-thumb-icon"></span>
-          <div class="portfolio-thumb-type"></div>
+          <span class="portfolio-thumb-icon">🌐</span>
+          <div class="portfolio-thumb-type">Web Design</div>
         </div>
       </div>
       <div class="portfolio-overlay">
         <div class="portfolio-overlay-cat">Web Design</div>
         <div class="portfolio-overlay-title">Portfolio Site — KM</div>
         <div class="portfolio-overlay-desc">Dark mode portfolio stranica sa animacijama.</div>
+        <div class="portfolio-overlay-hint">Otvori galeriju</div>
       </div>
     </div>
-    <div class="portfolio-item">
+    <div class="portfolio-item" data-gallery="photo-edit">
       <div class="portfolio-thumb">
         <img src="Foto1.png" class="portfolio-thumb-bg" style="width:100%; height:100%; object-fit:cover;">
         <div class="portfolio-thumb-inner">
@@ -1286,9 +1466,10 @@
         <div class="portfolio-overlay-cat">Photo Editing</div>
         <div class="portfolio-overlay-title">Editovanje Slika</div>
         <div class="portfolio-overlay-desc">Kompletna obrada fashion editoriala.</div>
+        <div class="portfolio-overlay-hint">Otvori galeriju</div>
       </div>
     </div>
-    <div class="portfolio-item">
+    <div class="portfolio-item" data-gallery="instagram">
       <div class="portfolio-thumb">
         <div class="portfolio-thumb-bg p5"></div>
         <div class="portfolio-thumb-inner">
@@ -1300,9 +1481,10 @@
         <div class="portfolio-overlay-cat">Social Media</div>
         <div class="portfolio-overlay-title">Instagram Templates</div>
         <div class="portfolio-overlay-desc">Set od 20 reusable template-a za Insta feed.</div>
+        <div class="portfolio-overlay-hint">Otvori galeriju</div>
       </div>
     </div>
-    <div class="portfolio-item">
+    <div class="portfolio-item" data-gallery="studio-x">
       <div class="portfolio-thumb">
         <div class="portfolio-thumb-bg p6"></div>
         <div class="portfolio-thumb-inner">
@@ -1314,6 +1496,7 @@
         <div class="portfolio-overlay-cat">Brand Identity</div>
         <div class="portfolio-overlay-title">Rebrand — Studio X</div>
         <div class="portfolio-overlay-desc">Kompletni rebrand: logo, boje, tipografija, voice.</div>
+        <div class="portfolio-overlay-hint">Otvori galeriju</div>
       </div>
     </div>
   </div>
@@ -1457,6 +1640,27 @@
   </ul>
 </footer>
 
+<!-- GALLERY LIGHTBOX -->
+<div class="gallery-overlay" id="galleryOverlay">
+  <div class="gallery-header">
+    <div class="gallery-title-group">
+      <div class="gallery-cat" id="galleryCat">Kategorija</div>
+      <div class="gallery-title" id="galleryTitle">Naziv projekta</div>
+    </div>
+    <button class="gallery-close" id="galleryClose">✕</button>
+  </div>
+  <div class="gallery-body">
+    <div class="gallery-preview">
+      <button class="gallery-nav-btn gallery-prev" id="galleryPrev">‹</button>
+      <img src="" alt="" class="gallery-preview-media" id="galleryPreviewImg" style="display:none;">
+      <iframe class="gallery-preview-media video-embed" id="galleryPreviewVideo" src="" frameborder="0" allowfullscreen style="display:none;"></iframe>
+      <button class="gallery-nav-btn gallery-next" id="galleryNext">›</button>
+      <div class="gallery-counter" id="galleryCounter">1 / 1</div>
+    </div>
+    <div class="gallery-strip" id="galleryStrip"></div>
+  </div>
+</div>
+
 <script>
   // Hamburger menu
   const hamburger = document.getElementById('hamburger');
@@ -1506,6 +1710,296 @@
       nav.style.backdropFilter = 'blur(0px)';
       nav.style.background = 'linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%)';
     }
+  });
+
+  // ─────────────────────────────────────────────
+  // GALLERY DATA
+  // Ovdje dodaješ svoje fajlove — objašnjenje ispod!
+  // ─────────────────────────────────────────────
+  /*
+   * KAKO DODATI SVOJE FAJLOVE:
+   *
+   * Svaki projekat ima ključ (npr. "video-reel") koji odgovara
+   * data-gallery atributu na portfolio-item elementu u HTML-u.
+   *
+   * Svaki medij ima:
+   *   type: "image" ili "video"
+   *   src:   putanja do fajla (slika) ILI YouTube/Vimeo embed URL (video)
+   *   thumb: putanja do thumbnail slike (za video možeš staviti istu sliku kao poster)
+   *   label: kratki opis koji se prikazuje ispod thumbnaila
+   *
+   * PRIMJER ZA SLIKU:
+   *   { type: "image", src: "moja-slika.jpg", thumb: "moja-slika.jpg", label: "Logo finalna verzija" }
+   *
+   * PRIMJER ZA YOUTUBE VIDEO:
+   *   { type: "video", src: "https://www.youtube.com/embed/VIDEO_ID", thumb: "https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg", label: "Showreel 2024" }
+   *   (VIDEO_ID nađeš u YouTube linku — npr. iz youtu.be/dQw4w9WgXcQ uzmi "dQw4w9WgXcQ")
+   *
+   * PRIMJER ZA VIMEO:
+   *   { type: "video", src: "https://player.vimeo.com/video/VIDEO_ID", thumb: "thumbnail.jpg", label: "Projekat" }
+   *
+   * Da dodaš novi projekat:
+   *   1. Dodaj novi key u GALLERY_DATA ispod
+   *   2. Na odgovarajući <div class="portfolio-item"> stavi data-gallery="tvoj-key"
+   */
+
+  const GALLERY_DATA = {
+    "video-reel": {
+      cat: "Video Editing",
+      title: "Cinematic Reel 2024",
+      items: [
+        // PRIMJER YOUTUBE VIDEO — zamijeni VIDEO_ID sa tvojim
+        {
+          type: "video",
+          src: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
+          thumb: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+          label: "Showreel 2024"
+        },
+        // PRIMJER PLACEHOLDER SLIKE — zamijeni sa tvojim fajlovima
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/0a1628/00b4d8?text=Still+Frame+01",
+          thumb: "https://placehold.co/200x113/0a1628/00b4d8?text=Still+1",
+          label: "Still frame — početna scena"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/0a1628/00b4d8?text=Still+Frame+02",
+          thumb: "https://placehold.co/200x113/0a1628/00b4d8?text=Still+2",
+          label: "Colour grading detalj"
+        }
+      ]
+    },
+    "lensart": {
+      cat: "Logo Design",
+      title: "Brand Identity — LensArt",
+      items: [
+        {
+          type: "image",
+          src: "LensArt.jpg",
+          thumb: "LensArt.jpg",
+          label: "Logo — finalna verzija"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/1a0a00/ff6b35?text=Colour+Palette",
+          thumb: "https://placehold.co/200x113/1a0a00/ff6b35?text=Paleta",
+          label: "Paleta boja"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/1a0a00/ff6b35?text=Brand+Mockup",
+          thumb: "https://placehold.co/200x113/1a0a00/ff6b35?text=Mockup",
+          label: "Brand mockup — vizitka"
+        }
+      ]
+    },
+    "km-web": {
+      cat: "Web Design",
+      title: "Portfolio Site — KM",
+      items: [
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/0a0a1a/7b2fbe?text=Homepage+Design",
+          thumb: "https://placehold.co/200x113/0a0a1a/7b2fbe?text=Homepage",
+          label: "Homepage"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/0a0a1a/7b2fbe?text=Portfolio+Page",
+          thumb: "https://placehold.co/200x113/0a0a1a/7b2fbe?text=Portfolio",
+          label: "Portfolio stranica"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/0a0a1a/7b2fbe?text=Mobile+View",
+          thumb: "https://placehold.co/200x113/0a0a1a/7b2fbe?text=Mobile",
+          label: "Mobilni prikaz"
+        }
+      ]
+    },
+    "photo-edit": {
+      cat: "Photo Editing",
+      title: "Editovanje Slika",
+      items: [
+        {
+          type: "image",
+          src: "Foto1.png",
+          thumb: "Foto1.png",
+          label: "Fashion editorial — finalna"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/001a10/00d68f?text=Before+%2F+After",
+          thumb: "https://placehold.co/200x113/001a10/00d68f?text=Before%2FAfter",
+          label: "Before / After usporedba"
+        }
+      ]
+    },
+    "instagram": {
+      cat: "Social Media",
+      title: "Instagram Templates",
+      items: [
+        {
+          type: "image",
+          src: "https://placehold.co/1080x1080/1a1a00/d4b800?text=Template+01",
+          thumb: "https://placehold.co/200x200/1a1a00/d4b800?text=T01",
+          label: "Template 01 — Quote post"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1080x1080/1a1a00/d4b800?text=Template+02",
+          thumb: "https://placehold.co/200x200/1a1a00/d4b800?text=T02",
+          label: "Template 02 — Promo"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1080x1350/1a1a00/d4b800?text=Story+Template",
+          thumb: "https://placehold.co/200x113/1a1a00/d4b800?text=Story",
+          label: "Story template"
+        }
+      ]
+    },
+    "studio-x": {
+      cat: "Brand Identity",
+      title: "Rebrand — Studio X",
+      items: [
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/1a000a/d80060?text=New+Logo",
+          thumb: "https://placehold.co/200x113/1a000a/d80060?text=Logo",
+          label: "Novi logo"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/1a000a/d80060?text=Brand+Guide",
+          thumb: "https://placehold.co/200x113/1a000a/d80060?text=Guide",
+          label: "Brand guidelines"
+        },
+        {
+          type: "image",
+          src: "https://placehold.co/1200x675/1a000a/d80060?text=Typography+%26+Colors",
+          thumb: "https://placehold.co/200x113/1a000a/d80060?text=Type",
+          label: "Tipografija i boje"
+        }
+      ]
+    }
+  };
+
+  // ─────────────────────────────────────────────
+  // GALLERY ENGINE (ne mijenjati)
+  // ─────────────────────────────────────────────
+  let currentItems = [];
+  let currentIndex = 0;
+
+  const overlay    = document.getElementById('galleryOverlay');
+  const galCat     = document.getElementById('galleryCat');
+  const galTitle   = document.getElementById('galleryTitle');
+  const galClose   = document.getElementById('galleryClose');
+  const galPrev    = document.getElementById('galleryPrev');
+  const galNext    = document.getElementById('galleryNext');
+  const galImg     = document.getElementById('galleryPreviewImg');
+  const galVideo   = document.getElementById('galleryPreviewVideo');
+  const galCounter = document.getElementById('galleryCounter');
+  const galStrip   = document.getElementById('galleryStrip');
+
+  function showItem(index) {
+    const item = currentItems[index];
+    currentIndex = index;
+
+    // fade
+    galImg.style.opacity = '0';
+    galVideo.style.opacity = '0';
+
+    setTimeout(() => {
+      if (item.type === 'video') {
+        galImg.style.display = 'none';
+        galVideo.style.display = 'block';
+        galVideo.src = item.src;
+        galVideo.style.opacity = '1';
+      } else {
+        galVideo.src = '';
+        galVideo.style.display = 'none';
+        galImg.style.display = 'block';
+        galImg.src = item.src;
+        galImg.alt = item.label || '';
+        galImg.style.opacity = '1';
+      }
+    }, 150);
+
+    galCounter.textContent = `${index + 1} / ${currentItems.length}`;
+    galPrev.disabled = index === 0;
+    galNext.disabled = index === currentItems.length - 1;
+
+    // update strip active state
+    document.querySelectorAll('.gallery-thumb-wrap').forEach((w, i) => {
+      w.querySelector('.gallery-thumb').classList.toggle('active', i === index);
+    });
+  }
+
+  function openGallery(key) {
+    const data = GALLERY_DATA[key];
+    if (!data) return;
+
+    currentItems = data.items;
+    galCat.textContent   = data.cat;
+    galTitle.textContent = data.title;
+
+    // build thumbnail strip
+    galStrip.innerHTML = '';
+    data.items.forEach((item, i) => {
+      const wrap  = document.createElement('div');
+      wrap.className = 'gallery-thumb-wrap';
+
+      const thumb = document.createElement('div');
+      thumb.className = 'gallery-thumb' + (item.type === 'video' ? ' video-thumb' : '');
+
+      const tImg = document.createElement('img');
+      tImg.src = item.thumb || item.src;
+      tImg.alt = item.label || '';
+      thumb.appendChild(tImg);
+
+      const label = document.createElement('div');
+      label.className = 'gallery-thumb-label';
+      label.textContent = item.label || '';
+
+      wrap.appendChild(thumb);
+      wrap.appendChild(label);
+      wrap.addEventListener('click', () => showItem(i));
+      galStrip.appendChild(wrap);
+    });
+
+    showItem(0);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGallery() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      galVideo.src = '';
+      galImg.src = '';
+    }, 350);
+  }
+
+  galClose.addEventListener('click', closeGallery);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeGallery(); });
+  galPrev.addEventListener('click', () => { if (currentIndex > 0) showItem(currentIndex - 1); });
+  galNext.addEventListener('click', () => { if (currentIndex < currentItems.length - 1) showItem(currentIndex + 1); });
+
+  document.addEventListener('keydown', e => {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowLeft' && currentIndex > 0) showItem(currentIndex - 1);
+    if (e.key === 'ArrowRight' && currentIndex < currentItems.length - 1) showItem(currentIndex + 1);
+  });
+
+  // Attach click to each portfolio item
+  document.querySelectorAll('.portfolio-item[data-gallery]').forEach(item => {
+    item.addEventListener('click', () => {
+      openGallery(item.dataset.gallery);
+    });
   });
 </script>
 </body>
